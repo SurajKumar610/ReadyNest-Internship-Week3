@@ -44,9 +44,18 @@ ReadyNest Intership Week3/
 
 ---
 
-## 🚀 Getting Started
+## 🌐 Live Production Links
 
-### Option 1: Quick Start (FastAPI Unified Mode)
+The application is deployed and accessible globally at the following links:
+- **Frontend Dashboard (Vercel)**: [https://ready-nest-internship-week3.vercel.app/](https://ready-nest-internship-week3.vercel.app/)
+- **Backend API Server (Render)**: [https://readynest-internship-week3.onrender.com/](https://readynest-internship-week3.onrender.com/)
+- **Swagger API Interactive Docs**: [https://readynest-internship-week3.onrender.com/docs](https://readynest-internship-week3.onrender.com/docs)
+
+---
+
+## 🚀 Local Development Setup
+
+### Option 1: Local Server (FastAPI Unified Mode)
 
 In unified mode, the FastAPI backend serves both the API endpoints and the static HTML frontend.
 
@@ -65,12 +74,12 @@ In unified mode, the FastAPI backend serves both the API endpoints and the stati
    python main.py
    ```
 
-4. **Access the dashboard**:
+4. **Access the local dashboard**:
    Open your browser and navigate to `http://127.0.0.1:8000`.
 
 ---
 
-### Option 2: Docker Deployment
+### Option 2: Docker Container Deployment (Local)
 
 You can build and deploy the entire application using the root `Dockerfile`.
 
@@ -84,7 +93,7 @@ You can build and deploy the entire application using the root `Dockerfile`.
    docker run -p 8000:8000 business-bi-dashboard
    ```
 
-3. **Access the dashboard**:
+3. **Access the local dashboard**:
    Navigate to `http://localhost:8000`.
 
 ---
