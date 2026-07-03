@@ -34,7 +34,9 @@ window.fetch = async function(resource, init) {
 };
 
 // Global variables
-const API_BASE_URL = "https://readynest-internship-week3.onrender.com"; 
+const API_BASE_URL = (window.location.origin && window.location.origin !== "null" && !window.location.origin.startsWith("file://")) 
+    ? "" 
+    : "http://localhost:8000"; 
 let activeView = "view-dashboard";
 let currentDatasetInfo = null;
 let leafletMap = null;

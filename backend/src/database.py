@@ -67,9 +67,9 @@ def verify_password(password: str, password_hash: str, salt: str) -> bool:
 # User Management operations
 def create_user(username: str, password: str) -> bool:
     """Creates a new user record in the database. Returns True if successful, False otherwise."""
-    username = username.strip()
     if not username or not password:
         return False
+    username = username.strip().lower()
         
     password_hash, salt = hash_password(password)
     
@@ -90,6 +90,9 @@ def create_user(username: str, password: str) -> bool:
 
 def get_user(username: str) -> dict | None:
     """Retrieves a user by username."""
+    if not username:
+        return None
+    username = username.strip().lower()
     conn = get_db_connection()
     cursor = conn.cursor()
     row = cursor.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
@@ -101,6 +104,7 @@ def get_user(username: str) -> dict | None:
 # Session Token operations
 def create_session(username: str, days_expiry: int = 7) -> str:
     """Creates a new session token for the user, stores it in SQLite, and returns the token."""
+    username = username.strip().lower()
     token = secrets.token_hex(32)
     expires_at = datetime.now() + timedelta(days=days_expiry)
     expires_at_str = expires_at.isoformat()
