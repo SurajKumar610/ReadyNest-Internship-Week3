@@ -1,0 +1,48 @@
+# Python Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+bin/
+lib/
+include/
+
+# Python Cache and Compiled Files
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# Databases
+**/auth.db
+**/*.db
+**/*.sqlite
+**/*.sqlite3
+
+# Project-Specific Data and Uploads (exclude large raw datasets and dynamic server data)
+backend/data/raw_listings.csv
+backend/data/clean_listings.csv
+backend/data/cleaning_stats.json
+
+# Local scraped/processed data directories
+data/raw/
+data/processed/
+data/exports/
+
+# System Files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp

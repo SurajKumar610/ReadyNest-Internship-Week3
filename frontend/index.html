@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>India Local Business Intelligence & Transformation Dashboard</title>
+    
+    <!-- Leaflet.js CSS (Map) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="app-container" id="app-wrapper">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <i class="logo-icon" data-lucide="map"></i>
+                    <div class="logo-text">ReadyNest <span>BI</span></div>
+                </div>
+                <button id="btn-toggle-sidebar" class="sidebar-toggle-btn" title="Toggle Sidebar">
+                    <i data-lucide="chevron-left" id="sidebar-toggle-icon"></i>
+                </button>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-item active" data-target="view-dashboard">
+                    <i data-lucide="layout-dashboard"></i> <span>Dashboard</span>
+                </a>
+                <a href="#" class="menu-item" data-target="view-opportunities">
+                    <i data-lucide="list-todo"></i> <span>Top Opportunities</span>
+                </a>
+                <a href="#" class="menu-item" data-target="view-inspector">
+                    <i data-lucide="file-search"></i> <span>Dataset Inspector</span>
+                </a>
+                <a href="#" class="menu-item" data-target="view-pipeline">
+                    <i data-lucide="git-branch"></i> <span>Cleaning Pipeline</span>
+                </a>
+                <a href="#" class="menu-item" data-target="view-exporter">
+                    <i data-lucide="download"></i> <span>Export Center</span>
+                </a>
+                <a href="#" class="menu-item" data-target="view-settings">
+                    <i data-lucide="sliders"></i> <span>Settings & Upload</span>
+                </a>
+                <a href="#" id="menu-btn-logout" class="menu-item menu-logout">
+                    <i data-lucide="log-out"></i> <span>Log Out</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-title">
+                    <h1 id="current-view-title">Dashboard Overview</h1>
+                    <span id="active-file-indicator">Dataset: No Dataset Loaded</span>
+                </div>
+                <div class="header-controls">
+                    <!-- Light/Dark Toggle -->
+                    <button id="btn-theme-toggle" class="btn-theme-toggle" title="Toggle Theme">
+                        <i data-lucide="sun" class="sun-icon"></i>
+                        <i data-lucide="moon" class="moon-icon"></i>
+                    </button>
+                    <!-- User Profile -->
+                    <div class="header-profile">
+                        <div class="profile-info">
+                            <span class="profile-name" id="user-display-name">Guest User</span>
+                            <span class="profile-role">Digital Specialist</span>
+                        </div>
+                        <div class="profile-avatar">
+                            <i data-lucide="user"></i>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Views Container -->
+            <div class="view-content">
+                <!-- VIEW 1: DASHBOARD -->
+                <div id="view-dashboard" class="dashboard-view active">
+                    <!-- Welcome Banner -->
+                    <div class="welcome-banner glass-card" id="welcome-banner-element">
+                        <div class="welcome-content">
+                            <h2>Welcome back, <span id="welcome-username">Digital Specialist</span>!</h2>
+                            <p>Analyze and optimize Google Maps business listings across India. Gain AI-driven insights, evaluate transformation scores, and export professional reports.</p>
+                        </div>
+                        <div class="welcome-spark">
+                            <i data-lucide="sparkles"></i>
+                        </div>
+                    </div>
+
+                    <!-- Executive Summary Card (Dynamic) -->
+                    <section class="executive-summary-section">
+                        <div class="glass-card exec-summary-card">
+                            <div class="exec-card-header">
+                                <div class="exec-badge"><i data-lucide="sparkles"></i> AI Executive Brief</div>
+                                <h2>Marketplace Diagnostics & Summary</h2>
+                            </div>
+                            <div class="exec-body-grid">
+                                <p id="exec-summary-paragraph" class="exec-text">
+                                    Loading dynamic marketplace parameters...
+                                </p>
+                                <div class="exec-badges" id="exec-highlight-badges">
+                                    <!-- Dynamic badges -->
+                                </div>
+                            </div>
+                            <div class="exec-recommendation-row">
+                                <strong>Recommended Focus Categories:</strong>
+                                <span id="exec-focus-categories">Loading...</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- KPI Cards Row -->
+                    <section class="kpi-grid">
+                        <div class="kpi-card glass-card">
+                            <div class="kpi-icon icon-blue"><i data-lucide="building"></i></div>
+                            <div class="kpi-details">
+                                <span class="kpi-label">Total Listings</span>
+                                <h3 id="kpi-total-listings">0</h3>
+                                <span class="kpi-desc">Total businesses in dataset</span>
+                            </div>
+                        </div>
+                        <div class="kpi-card glass-card">
+                            <div class="kpi-icon icon-red"><i data-lucide="globe"></i></div>
+                            <div class="kpi-details">
+                                <span class="kpi-label">Website Ownership Gap</span>
+                                <h3 id="kpi-website-gap">0%</h3>
+                                <span class="kpi-desc">Businesses without websites</span>
+                            </div>
+                        </div>
+                        <div class="kpi-card glass-card">
+                            <div class="kpi-icon icon-indigo"><i data-lucide="zap"></i></div>
+                            <div class="kpi-details">
+                                <span class="kpi-label">Avg Opportunity Score</span>
+                                <h3 id="kpi-avg-opp-score">0/100</h3>
+                                <span class="kpi-desc">Priority score (higher is urgent)</span>
+                            </div>
+                        </div>
+                        <div class="kpi-card glass-card">
+                            <div class="kpi-icon icon-green"><i data-lucide="shield"></i></div>
+                            <div class="kpi-details">
+                                <span class="kpi-label">Avg Data Quality Score</span>
+                                <h3 id="kpi-avg-dq-score">0/100</h3>
+                                <span class="kpi-desc">Completeness of listing details</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Dashboard Core Layout -->
+                    <div class="dashboard-core-grid">
+                        <!-- Left Panel: Feature checklist & map -->
+                        <div class="left-panel">
+                            <!-- Feature Availability card -->
+                            <div class="glass-card feature-availability-card">
+                                <h4><i data-lucide="check-circle"></i> System Feature Checklist</h4>
+                                <ul class="feature-checklist" id="feature-checklist-container">
+                                    <!-- Dynamic checklist -->
+                                </ul>
+                            </div>
+                            
+                            <!-- Leaflet Map Wrapper -->
+                            <div class="glass-card map-card" id="dashboard-map-container" style="display:none;">
+                                <h4><i data-lucide="map-pin"></i> India Opportunity Mapping</h4>
+                                <div id="business-leaflet-map" class="leaflet-map-element"></div>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: AI Insights Panel -->
+                        <div class="right-panel">
+                            <div class="glass-card insights-card">
+                                <h4><i data-lucide="sparkles"></i> AI Insights Panel</h4>
+                                <div class="insights-container" id="ai-insights-container">
+                                    <!-- Dynamic insights -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BI Charts Gallery -->
+                    <section class="charts-gallery-title">
+                        <h2>Business Intelligence Visualizations</h2>
+                    </section>
+                    
+                    <section class="charts-grid">
+                        <!-- Chart 1: Website Availability -->
+                        <div class="chart-wrapper glass-card" id="chart-website-wrapper">
+                            <h5>Website Availability</h5>
+                            <div class="chart-container">
+                                <canvas id="chart-website-pie"></canvas>
+                            </div>
+                        </div>
+                        <!-- Chart 2: Category Distribution -->
+                        <div class="chart-wrapper glass-card" id="chart-category-wrapper">
+                            <h5>Top 10 Business Categories</h5>
+                            <div class="chart-container">
+                                <canvas id="chart-category-bar"></canvas>
+                            </div>
+                        </div>
+                        <!-- Chart 3: Ratings Histogram -->
+                        <div class="chart-wrapper glass-card" id="chart-rating-wrapper">
+                            <h5>Ratings Distribution</h5>
+                            <div class="chart-container">
+                                <canvas id="chart-rating-hist"></canvas>
+                            </div>
+                        </div>
+                        <!-- Chart 4: Reviews Histogram -->
+                        <div class="chart-wrapper glass-card" id="chart-reviews-wrapper">
+                            <h5>Reviews Volume Distribution</h5>
+                            <div class="chart-container">
+                                <canvas id="chart-reviews-hist"></canvas>
+                            </div>
+                        </div>
+                        <!-- Chart 5: Opportunity Score Histogram -->
+                        <div class="chart-wrapper glass-card" id="chart-opp-wrapper">
+                            <h5>Opportunity Score Distribution</h5>
+                            <div class="chart-container">
+                                <canvas id="chart-opp-hist"></canvas>
+                            </div>
+                        </div>
+                        <!-- Chart 6: Opp Score vs Data Quality Scatter -->
+                        <div class="chart-wrapper glass-card" id="chart-opp-dq-wrapper">
+                            <h5>Opportunity Score vs Data Quality</h5>
+                            <div class="chart-container">
+                                <canvas id="chart-opp-dq-scatter"></canvas>
+                            </div>
+                        </div>
+                        <!-- Chart 7: Average Rating by Category -->
+                        <div class="chart-wrapper glass-card" id="chart-avg-rating-wrapper">
+                            <h5>Avg Rating by Category</h5>
+                            <div class="chart-container">
+                                <canvas id="chart-avg-rating-category"></canvas>
+                            </div>
+                        </div>
+                        <!-- Chart 8: Businesses by City -->
+                        <div class="chart-wrapper glass-card" id="chart-city-wrapper">
+                            <h5>Businesses by City</h5>
+                            <div class="chart-container">
+                                <canvas id="chart-city-bar"></canvas>
+                            </div>
+                        </div>
+                        <!-- Chart 9: Website Status by Category (Stacked) -->
+                        <div class="chart-wrapper glass-card" id="chart-website-category-wrapper">
+                            <h5>Website Status by Category</h5>
+                            <div class="chart-container">
+                                <canvas id="chart-website-category-stacked"></canvas>
+                            </div>
+                        </div>
+                        <!-- Chart 10: Rating vs Reviews Scatter -->
+                        <div class="chart-wrapper glass-card" id="chart-scatter-wrapper">
+                            <h5>Reviews vs Ratings</h5>
+                            <div class="chart-container">
+                                <canvas id="chart-rating-reviews-scatter"></canvas>
+                            </div>
+                        </div>
+                        <!-- Chart 11: Top 10 Opportunities Horizontal Bar -->
+                        <div class="chart-wrapper glass-card" id="chart-top-opps-wrapper">
+                            <h5>Top 10 Opportunities</h5>
+                            <div class="chart-container">
+                                <canvas id="chart-top-opps-bar"></canvas>
+                            </div>
+                        </div>
+                        <!-- Chart 12: Businesses by State (Optional) -->
+                        <div class="chart-wrapper glass-card" id="chart-state-wrapper" style="display:none;">
+                            <h5>Businesses by State</h5>
+                            <div class="chart-container">
+                                <canvas id="chart-state-bar"></canvas>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- VIEW 2: TOP OPPORTUNITIES -->
+                <div id="view-opportunities" class="dashboard-view">
+                    <!-- Advanced Filters Panel -->
+                    <section class="filters-section glass-card">
+                        <h4><i data-lucide="filter"></i> Advanced Search & Filters</h4>
+                        <div class="filters-grid">
+                            <div class="filter-group">
+                                <label for="filter-search">Search Business / Address</label>
+                                <input type="text" id="filter-search" placeholder="Type name, street, city...">
+                            </div>
+                            <div class="filter-group">
+                                <label for="filter-category">Business Category</label>
+                                <select id="filter-category">
+                                    <option value="All">All Categories</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="filter-city">City</label>
+                                <select id="filter-city">
+                                    <option value="All">All Cities</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="filter-website">Website Status</label>
+                                <select id="filter-website">
+                                    <option value="All">All Statuses</option>
+                                    <option value="Has Website">Has Website</option>
+                                    <option value="No Website">No Website</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="filter-opportunity">Opportunity Level</label>
+                                <select id="filter-opportunity">
+                                    <option value="All">All Levels</option>
+                                    <option value="Excellent Opportunity">Excellent Opportunity</option>
+                                    <option value="High Opportunity">High Opportunity</option>
+                                    <option value="Medium Opportunity">Medium Opportunity</option>
+                                    <option value="Low Opportunity">Low Opportunity</option>
+                                    <option value="Digitally Established">Digitally Established</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="filter-actions">
+                            <button id="btn-reset-filters" class="btn btn-secondary">Reset Filters</button>
+                        </div>
+                    </section>
+
+                    <!-- Opportunities Table -->
+                    <section class="table-section glass-card">
+                        <div class="table-header">
+                            <h2>Top Opportunity Recommendations</h2>
+                            <div class="table-actions">
+                                <button id="btn-table-export-csv" class="btn btn-sm btn-outline"><i data-lucide="file-spreadsheet"></i> CSV</button>
+                                <button id="btn-table-export-excel" class="btn btn-sm btn-outline"><i data-lucide="file-spreadsheet"></i> Excel</button>
+                            </div>
+                        </div>
+                        <div class="table-wrapper">
+                            <table id="opportunities-table">
+                                <thead>
+                                    <tr>
+                                        <th data-sort="Business Name">Business Name <i data-lucide="chevrons-up-down"></i></th>
+                                        <th data-sort="Category">Category <i data-lucide="chevrons-up-down"></i></th>
+                                        <th data-sort="Rating">Rating <i data-lucide="chevrons-up-down"></i></th>
+                                        <th data-sort="Reviews">Reviews <i data-lucide="chevrons-up-down"></i></th>
+                                        <th data-sort="Website Status">Website <i data-lucide="chevrons-up-down"></i></th>
+                                        <th data-sort="Opportunity Score">Opportunity Score <i data-lucide="chevrons-up-down"></i></th>
+                                        <th data-sort="Data Quality Score">Data Quality Score <i data-lucide="chevrons-up-down"></i></th>
+                                        <th>Recommendation</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="opportunities-table-body">
+                                    <tr>
+                                        <td colspan="8" class="text-center">No business records found. Generate or upload a dataset.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Pagination -->
+                        <div class="table-pagination">
+                            <span id="pagination-info">Showing 0 of 0 entries</span>
+                            <div class="pagination-controls">
+                                <button id="btn-prev-page" class="btn btn-sm btn-secondary" disabled>Prev</button>
+                                <span id="current-page-num">Page 1</span>
+                                <button id="btn-next-page" class="btn btn-sm btn-secondary" disabled>Next</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- VIEW 3: DATASET INSPECTOR -->
+                <div id="view-inspector" class="dashboard-view">
+                    <div class="inspector-grid">
+                        <!-- Left Panel: File Properties -->
+                        <div class="glass-card inspector-stats-card">
+                            <h3><i data-lucide="file-bar-chart"></i> Ingestion Audit Properties</h3>
+                            <div class="inspector-props" id="inspector-properties-list">
+                                <p>No file active. Complete demo generation or upload a custom CSV/Excel file in settings.</p>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Checklist Column Audit -->
+                        <div class="glass-card column-audit-card">
+                            <h3><i data-lucide="shield-check"></i> Column Integration Checklist</h3>
+                            <div class="column-checklists">
+                                <div class="col-checklist-group">
+                                    <h5>Layer 1: Mandatory Required Columns</h5>
+                                    <ul id="checklist-required-columns" class="audit-list">
+                                        <!-- Dynamic required -->
+                                    </ul>
+                                </div>
+                                <div class="col-checklist-group">
+                                    <h5>Layer 3: Optional Dataset Columns</h5>
+                                    <ul id="checklist-optional-columns" class="audit-list">
+                                        <!-- Dynamic optional -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 4: CLEANING PIPELINE -->
+                <div id="view-pipeline" class="dashboard-view">
+                    <!-- Cleaning Flow Visual -->
+                    <div class="glass-card pipeline-visual-card">
+                        <h3><i data-lucide="git-branch"></i> Pipeline Dataflow Process</h3>
+                        <div class="pipeline-flow-diagram">
+                            <div class="flow-step">
+                                <div class="step-icon"><i data-lucide="file-spreadsheet"></i></div>
+                                <span>Raw Dataset</span>
+                            </div>
+                            <div class="flow-arrow"><i data-lucide="chevron-right"></i></div>
+                            <div class="flow-step">
+                                <div class="step-icon"><i data-lucide="filter"></i></div>
+                                <span>Data Cleaning</span>
+                            </div>
+                            <div class="flow-arrow"><i data-lucide="chevron-right"></i></div>
+                            <div class="flow-step">
+                                <div class="step-icon"><i data-lucide="shield-check"></i></div>
+                                <span>Validation Check</span>
+                            </div>
+                            <div class="flow-arrow"><i data-lucide="chevron-right"></i></div>
+                            <div class="flow-step">
+                                <div class="step-icon"><i data-lucide="calculator"></i></div>
+                                <span>Business Analysis</span>
+                            </div>
+                            <div class="flow-arrow"><i data-lucide="chevron-right"></i></div>
+                            <div class="flow-step">
+                                <div class="step-icon"><i data-lucide="layout-dashboard"></i></div>
+                                <span>Dashboard Analytics</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pipeline Stats -->
+                    <div class="pipeline-details-grid">
+                        <div class="glass-card pipeline-stats-card">
+                            <h3><i data-lucide="list-todo"></i> Preprocessing Operations Log</h3>
+                            <div class="cleaning-stats-list" id="pipeline-cleaning-stats-list">
+                                <p>No data sanitized. Generate or upload a dataset.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 5: EXPORT CENTER -->
+                <div id="view-exporter" class="dashboard-view">
+                    <div class="exporter-panel-grid">
+                        <!-- Left Card: Trigger Exports -->
+                        <div class="glass-card export-trigger-card">
+                            <h3><i data-lucide="file-text"></i> Download Reports & Presentation Slide Decks</h3>
+                            <p>Generate professional files reflecting the current filtered dataset. Dynamic chart images are compiled directly into the documents.</p>
+                            <div class="export-buttons-group">
+                                <button id="btn-export-pdf" class="btn btn-lg btn-primary"><i data-lucide="file-text"></i> Executive PDF Report</button>
+                                <button id="btn-export-pptx" class="btn btn-lg btn-indigo"><i data-lucide="presentation"></i> PowerPoint Presentation (PPTX)</button>
+                                <button id="btn-export-excel" class="btn btn-lg btn-success"><i data-lucide="file-spreadsheet"></i> Formatted Excel Dataset</button>
+                                <button id="btn-export-csv" class="btn btn-lg btn-secondary"><i data-lucide="file-text"></i> Clean CSV Dataset</button>
+                            </div>
+                        </div>
+
+                        <!-- Right Card: Methodology description -->
+                        <div class="glass-card methodology-card">
+                            <h3><i data-lucide="info"></i> Methodology & Formulas</h3>
+                            <div class="formula-block">
+                                <h5>Opportunity Score (0-100)</h5>
+                                <p>Calculates the urgency of digital transformation. Evaluates the website availability (+40 if missing), review volume (+5 to +15), rating severity (+10 to +20), and missing phone detail (+5). Weights are configured in <code>config/scoring.json</code>.</p>
+                            </div>
+                            <div class="formula-block">
+                                <h5>Data Quality Score (0-100)</h5>
+                                <p>Calculates dataset integrity. Starts at 100. Deducts for missing critical parameters (Website -20, Phone -15, Name/City/Address -10 each), duplicate records (-10), standardizations (-5), and missing optional properties (-2 each).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 6: SETTINGS & UPLOAD -->
+                <div id="view-settings" class="dashboard-view">
+                    <div class="settings-grid">
+                        <!-- Upload Custom CSV -->
+                        <div class="glass-card settings-upload-card">
+                            <h3><i data-lucide="upload-cloud"></i> Upload Custom Dataset</h3>
+                            <p>Import your own Google Maps business listing. The system case-insensitively maps available fields and validates mandatory columns.</p>
+                            <div class="upload-form">
+                                <input type="file" id="file-uploader" accept=".csv,.xlsx,.xls" class="hidden-input">
+                                <label for="file-uploader" class="upload-drag-area">
+                                    <i data-lucide="upload" class="drag-icon"></i>
+                                    <span>Drag & Drop File Here or Click to Browse</span>
+                                    <small>Supports CSV and XLSX formats</small>
+                                </label>
+                                <div id="upload-status-indicator"></div>
+                            </div>
+                            
+                            <!-- Dynamic success summary card -->
+                            <div id="upload-success-card" class="glass-card upload-success-card hidden">
+                                <div class="success-card-header">
+                                    <h4>Dataset Ingestion Summary</h4>
+                                    <div class="badge badge-established"><i data-lucide="check-circle" style="width:12px; height:12px; margin-right:4px;"></i> Ready for Analysis</div>
+                                </div>
+                                <div class="success-card-grid">
+                                    <div class="success-stat-item">
+                                        <span class="stat-label">Dataset Name</span>
+                                        <span class="stat-value" id="success-dataset-name">-</span>
+                                    </div>
+                                    <div class="success-stat-item">
+                                        <span class="stat-label">Total Businesses</span>
+                                        <span class="stat-value" id="success-total-businesses">-</span>
+                                    </div>
+                                    <div class="success-stat-item">
+                                        <span class="stat-label">Categories</span>
+                                        <span class="stat-value" id="success-categories-count">-</span>
+                                    </div>
+                                    <div class="success-stat-item">
+                                        <span class="stat-label">Cities</span>
+                                        <span class="stat-value" id="success-cities-count">-</span>
+                                    </div>
+                                    <div class="success-stat-item">
+                                        <span class="stat-label">Upload Time</span>
+                                        <span class="stat-value" id="success-upload-time">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Demo dataset generator -->
+                        <div class="glass-card settings-demo-card">
+                            <h3><i data-lucide="play-circle"></i> Setup Demonstration Workspace</h3>
+                            <p>Don't have a dataset? Spin up a comprehensive India-focused business listing mock dataset complete with realistic marketplace anomalies.</p>
+                            <button id="btn-open-generator-modal" class="btn btn-lg btn-indigo"><i data-lucide="cog"></i> Generate Demo Dataset</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <footer class="app-footer">
+                    <span class="app-footer-brand">Google Maps Business Analysis</span>
+                    <span>AI Powered Business Intelligence Dashboard</span>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <!-- BUSINESS PROFILE DRAWER PANEL (Slides from right) -->
+    <div id="business-profile-drawer" class="profile-drawer">
+        <div class="drawer-overlay" id="profile-drawer-overlay"></div>
+        <div class="drawer-container">
+            <div class="drawer-header">
+                <h3><i data-lucide="store"></i> Business Profile Page</h3>
+                <button id="btn-close-drawer" class="btn-close"><i data-lucide="x"></i></button>
+            </div>
+            <div class="drawer-body" id="business-profile-details">
+                <!-- Dynamic Content loaded from JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 1: GENERATOR SIZE SELECTOR -->
+    <div id="generator-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Generate Demo Dataset</h3>
+                <button class="modal-btn-close" id="btn-close-gen-modal"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <p>Choose the size of the demonstration dataset. Larger datasets provide richer analytics but require slightly more processing time.</p>
+                <div class="generator-options-list">
+                    <label class="gen-option-card">
+                        <input type="radio" name="demo-size" value="100">
+                        <div class="option-details">
+                            <span class="option-title">Small Dataset (100 Records)</span>
+                            <span class="option-desc">Suitable for quick testing and development. Fast loading.</span>
+                            <span class="option-time">Estimated Time: ~1 second</span>
+                        </div>
+                    </label>
+                    <label class="gen-option-card selected">
+                        <input type="radio" name="demo-size" value="500" checked>
+                        <div class="option-details">
+                            <span class="option-title">Medium Dataset (500 Records) - Recommended</span>
+                            <span class="option-desc">Balanced performance and rich analytics. Suitable for most users.</span>
+                            <span class="option-time">Estimated Time: ~2 seconds</span>
+                        </div>
+                    </label>
+                    <label class="gen-option-card">
+                        <input type="radio" name="demo-size" value="1000">
+                        <div class="option-details">
+                            <span class="option-title">Large Dataset (1000 Records)</span>
+                            <span class="option-desc">Demonstrates full BI engine scaling. Richer charts and insights.</span>
+                            <span class="option-time">Estimated Time: ~4 seconds</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-cancel-generation" class="btn btn-secondary">Cancel</button>
+                <button id="btn-trigger-generation" class="btn btn-indigo">Generate Dataset</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: PROGRESS LOADING BAR -->
+    <div id="progress-modal" class="modal-overlay">
+        <div class="modal-card modal-card-sm text-center">
+            <h3>Generating Demo Dataset...</h3>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progress-bar-element"></div>
+            </div>
+            <p id="progress-step-text" class="progress-step-label">Creating Business Records...</p>
+        </div>
+    </div>
+
+    <!-- MODAL 3: SUCCESS SUMMARY -->
+    <div id="success-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header header-success">
+                <h3><i data-lucide="check-circle" style="color:var(--green); width:20px; height:20px; vertical-align:middle; margin-right:6px;"></i> Demo Dataset Generated</h3>
+            </div>
+            <div class="modal-body" id="success-summary-details">
+                <!-- Dynamic Stats summary -->
+            </div>
+            <div class="modal-footer">
+                <button id="btn-continue-dashboard" class="btn btn-indigo">Continue to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTHENTICATION VIEW (SIGNUP / LOGIN OVERLAY) -->
+    <div id="auth-screen" class="auth-screen active">
+        <div class="auth-card glass-card">
+            <div class="auth-header">
+                <i data-lucide="map" class="auth-logo-icon"></i>
+                <h2>ReadyNest BI</h2>
+                <p>Sign in to access the Business Intelligence Dashboard</p>
+            </div>
+            
+            <div class="auth-tabs">
+                <button id="tab-login" class="auth-tab active">Sign In</button>
+                <button id="tab-signup" class="auth-tab">Create Account</button>
+            </div>
+            
+            <form id="form-login" class="auth-form active">
+                <div class="form-group">
+                    <label for="login-username"><i data-lucide="user"></i> Username</label>
+                    <input type="text" id="login-username" placeholder="Enter username" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="login-password"><i data-lucide="lock"></i> Password</label>
+                    <input type="password" id="login-password" placeholder="Enter password" required autocomplete="current-password">
+                </div>
+                <div id="login-error-msg" class="auth-error-msg hidden"></div>
+                <button type="submit" class="btn btn-indigo btn-block"><i data-lucide="log-in"></i> Sign In</button>
+            </form>
+            
+            <form id="form-signup" class="auth-form">
+                <div class="form-group">
+                    <label for="signup-username"><i data-lucide="user"></i> Choose Username</label>
+                    <input type="text" id="signup-username" placeholder="At least 3 characters" required autocomplete="new-username">
+                </div>
+                <div class="form-group">
+                    <label for="signup-password"><i data-lucide="lock"></i> Password</label>
+                    <input type="password" id="signup-password" placeholder="At least 6 characters" required autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label for="signup-confirm-password"><i data-lucide="check-circle"></i> Confirm Password</label>
+                    <input type="password" id="signup-confirm-password" placeholder="Repeat password" required autocomplete="new-password">
+                </div>
+                <div id="signup-error-msg" class="auth-error-msg hidden"></div>
+                <div id="signup-success-msg" class="auth-success-msg hidden"></div>
+                <button type="submit" class="btn btn-success btn-block"><i data-lucide="user-plus"></i> Create Account</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="toast-container"></div>
+    
+    <!-- Leaflet.js CDN (Map) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Chart.js CDN (Charts) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom Application Logic -->
+    <script src="js/app.js"></script>
+</body>
+</html>
